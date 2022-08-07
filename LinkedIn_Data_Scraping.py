@@ -58,8 +58,10 @@ def searching(search):
     people_button = [btn for btn in buttons if btn.text == 'Kişiler']
     people_button[0].click()
 
+
 def country_Selection(country):
-    country_Button = driver.find_element(by=By.XPATH, value="//button[@aria-label = 'Konumlar filtre. Bu düğmeyi tıklamak tüm Konumlar filtreyi gösterir.']")
+    country_Button = driver.find_element(by=By.XPATH,
+                                         value="//button[@aria-label = 'Konumlar filtre. Bu düğmeyi tıklamak tüm Konumlar filtreyi gösterir.']")
     country_Button.click()
     time.sleep(2)
     search_Bar = driver.find_element(by=By.XPATH, value="//input[@placeholder = 'Konum ekle']")
@@ -75,6 +77,7 @@ def country_Selection(country):
                                         value="/html/body/div[4]/div[3]/div[2]/section/div/nav/div/ul/li[4]/div/div/div/div[1]/div/form/fieldset/div[2]/button[2]")
     result_button.click()
     time.sleep(4)
+
 
 def next_Page():
     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
@@ -92,7 +95,7 @@ time.sleep(7)
 country_Selection(country=country)
 time.sleep(4)
 # #Data Scraping
-#lists
+# lists
 name_list = []
 role_list = []
 urls = []
@@ -140,7 +143,7 @@ try:
 
         next_Page()
         time.sleep(2)
-    data = pd.DataFrame({'Name':name_list,})
+
 except selenium.common.exceptions.NoSuchElementException:
     print(name_list)
     print(role_list)
@@ -152,9 +155,13 @@ print(role_list)
 print(urls)
 print(company_list)
 
+create_DB = str(input("To create database press: 'd',to continue press: 'c'"))
 
-
-
-
-
-
+if create_DB == 'd':
+    data = pd.DataFrame({'Name': name_list, 'Role': role_list,
+                         'Company': company_list, 'LinkedIn': urls})
+    writer = pd.ExcelWriter(f'C:\\Users\\Hp\\Desktop\\Automation_Outputs\\{search}_in_{country}.xlsx')
+    data.to_excel(writer)
+    writer.save()
+elif create_DB == 'c':
+    pass
