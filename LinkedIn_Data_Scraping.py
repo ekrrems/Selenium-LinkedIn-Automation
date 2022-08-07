@@ -102,7 +102,7 @@ urls = []
 company_list = []
 
 try:
-    for p in range(5):
+    for p in range(3):
         # Names
         names = driver.find_elements(by=By.XPATH, value="//span[@dir='ltr']")
         for i in range(len(names)):
@@ -159,7 +159,7 @@ create_DB = str(input("To create database press: 'd',to continue press: 'c'"))
 
 if create_DB == 'd':
     data = pd.DataFrame({'Name': name_list, 'Role': role_list,
-                         'Company': company_list, 'LinkedIn': urls})
+                         'Company': company_list, 'LinkedIn': urls, 'Country': [country for c in range(len(urls))]})
     writer = pd.ExcelWriter(f'C:\\Users\\Hp\\Desktop\\Automation_Outputs\\{search}_in_{country}.xlsx')
     data.to_excel(writer)
     writer.save()
