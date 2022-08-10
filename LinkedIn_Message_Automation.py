@@ -10,11 +10,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 import time
 import pandas as pd
-import numpy as np
+
 
 # *************#
-our_username = str(input('Your E-mail Adress'))
-our_password = str(input('Your Password'))
+# our_username = str(input('Your E-mail Adress'))
+# our_password = str(input('Your Password'))
+our_username = 'ekremserdarozturk@hotmail.com'
+our_password = 'adanali_01'
 # *************#
 url = 'https://www.linkedin.com/login?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin'
 
@@ -74,8 +76,7 @@ def add_note(name):
     note = driver.find_element(by=By.XPATH,value="//button[@aria-label = 'Not ekle']")
     note.click()
 
-    script = f"""Hi {name}, I hope you are doing well. I am Ekrem, reaching out to you from Global AI Hub, AI Team. We would like to invite you to an amazing mentorship opportunity in our huge bootcamps that we organize all around the world. To talk further, please accept my invitation."""
-    # Add script
+    script = f"""Message To Send"""
     textarea = driver.find_element(by=By.XPATH,value="//textarea[@id = 'custom-message']")
     textarea.click()
     textarea.send_keys(script)
@@ -89,26 +90,75 @@ def add_note(name):
 
 def connect_in_more():
     """Clicks connect that is in the 'Daha Fazla'"""
-    more = driver.find_element(by=By.XPATH,value="//button[@aria-label = 'Daha fazla işlem']")
-    driver.execute_script("arguments[0].click();", more)
+    more = driver.find_element(by=By.XPATH,value="/html/body/div[5]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[3]/div/div[3]/button")
+    time.sleep(1)
+    more.click()
     time.sleep(2)
-    connect = driver.find_element(by=By.XPATH,value="//li-icon[@type = 'connect']")
+    connect = driver.find_element(by=By.XPATH,value="/html/body/div[5]/div[3]/div/div/div[2]/div/div/main/section[1]/div[2]/div[3]/div/div[3]/div/div/ul/li[4]/div/li-icon")
+    connect.click()
+
+def direct_message():
+    message_button = driver.find_element(by=By.XPATH, value= "//section[@class = 'artdeco-card ember-view pv-top-card']/div[2]/div[3]/div/div[2]/button")
+    message_button.click()
+    time.sleep(2)
+
+    connect_button = driver.find_element(by=By.XPATH , value="//section[@class = 'artdeco-card ember-view pv-top-card']/div[2]/div[3]/div/div[2]/div/div/ul/li[5]/div/li-icon")
+    time.sleep(1)
+    connect_button.click()
+
+def work_related():
+    button = driver.find_element(by=By.XPATH, value="/html/body/div[3]/div/div/div[2]/div/button[3]")
+    time.sleep(1)
+    button.click()
+    time.sleep(1)
+
+    connect =driver.find_element(by=By.XPATH, value= "/html/body/div[3]/div/div/div[3]/button")
     connect.click()
 
 
-for i, j in excel_sheet[['Name', 'LinkedIn Profile Link']][20:30].values:
+
+
+
+
+for i, j in excel_sheet[['Name', 'LinkedIn']][348:355].values:
     name = (str(i).split())[0]
     contact_url = str(j)
+    time.sleep(2)
 
+    new_contact(contact_url=contact_url)
+    parent_div = driver.find_element(by=By.XPATH,
+                                     value="//section[@class = 'artdeco-card ember-view pv-top-card']/div[2]/div[3]/div")
+    divs = parent_div.find_elements(by=By.XPATH, value="./*")
+    div_names = []
+    for a in divs:
+        div_names.append(a.text)
+
+    num_of_divs = len(parent_div.find_elements(by=By.XPATH, value="./*"))
     try:
-        new_contact(contact_url=contact_url)
-        press_connect()
-        add_note(name=name)
-        print(i)
+        if num_of_divs == 2:
 
-    except selenium.common.exceptions.ElementClickInterceptedException:
-        connect_in_more()
-        add_note(name=name)
-        print(i)
+            try:
+                time.sleep(2)
+                direct_message()
+                add_note(name=name)
+                print(i)
+            except selenium.common.exceptions.NoSuchElementException:
+                work_related()
+                time.sleep(3)
+                add_note(name=name)
+                print(i)
+            finally:
+                continue
+        elif num_of_divs >= 3:
+            time.sleep(0)
+            if div_names[0] == 'Bağlantı kur':
+                press_connect()
+                add_note(name=name)
+                print(i)
+
+            elif div_names[0] == 'Takip Et':
+                connect_in_more()
+                add_note(name=name)
+                print(i)
     finally:
         continue
