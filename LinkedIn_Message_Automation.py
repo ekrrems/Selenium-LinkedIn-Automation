@@ -13,10 +13,9 @@ import pandas as pd
 
 
 # *************#
-# our_username = str(input('Your E-mail Adress'))
-# our_password = str(input('Your Password'))
-our_username = 'ekremserdarozturk@hotmail.com'
-our_password = 'adanali_01'
+our_username = str(input('Your E-mail Adress'))
+our_password = str(input('Your Password'))
+
 # *************#
 url = 'https://www.linkedin.com/login?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin'
 
