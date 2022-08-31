@@ -20,13 +20,13 @@ our_password = str(input('Your Password'))
 url = 'https://www.linkedin.com/login?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin'
 
 # *************#
-service_obj = Service(r'C:\Users\Hp\Desktop\hp yedekler\masaustu\Global AI Hub\Selenium\chromedriver1.exe')
+service_obj = Service(r'chromedriver1.exe')
 driver = webdriver.Chrome(service=service_obj)
 # *************#
 driver.get(url)
 
 # Loading Excel Sheet
-excel_sheet = pd.read_excel(r'C:\Users\Hp\Desktop\hp yedekler\masaustu\Global AI Hub\Selenium\Community Database .xlsx')
+excel_sheet = pd.read_excel(r'Excel_file')
 # print(excel_sheet[4:10].columns)
 # print(excel_sheet[['Name','LinkedIn Profile Link']][4:10])
 
